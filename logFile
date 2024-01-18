@@ -1,0 +1,255 @@
+## this file contains all steps executed on the project and all related deployment steps
+
+C:\workspace_docker_new\spring-boot-docker>docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED        SIZE
+spring-boot-docker            latest    a7daf591c0dd   3 days ago     490MB
+gcr.io/k8s-minikube/kicbase   v0.0.42   dbc648475405   2 months ago   1.2GB
+
+C:\workspace_docker_new\spring-boot-docker>docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED        SIZE
+spring-boot-docker            latest    a7daf591c0dd   3 days ago     490MB
+gcr.io/k8s-minikube/kicbase   v0.0.42   dbc648475405   2 months ago   1.2GB
+
+C:\workspace_docker_new\spring-boot-docker>docker image rm a7daf591c0dd
+Untagged: spring-boot-docker:latest
+Deleted: sha256:a7daf591c0dd043b21aeb192136d989ad18d201057e1ec60a36f84ceaeefad45
+
+C:\workspace_docker_new\spring-boot-docker>
+
+
+docker build -t spring-boot-docker:latest .
+Docker image
+C:\workspace_docker_new\spring-boot-docker>docker run -p 8081:8080 spring-boot-docker
+
+Once Image created then deploy it using miniKube
+
+First setup Minikube on the local env.
+Minikube delete old image 
+
+Minikube status
+	minikube
+	type: Control Plane
+	host: Stopped
+	kubelet: Stopped
+	apiserver: Stopped
+	kubeconfig: Stopped
+Minikube start 
+	PS C:\Users\shjena> minikube status
+	minikube
+	type: Control Plane
+	host: Running
+	kubelet: Running
+	apiserver: Running
+	kubeconfig: Configured
+	
+Kubectl get all
+Kubectl
+Minikube
+
+
+PS C:\Users\shjena> kubectl create deployment spring-boot-docker --image=springbootk8sdemo:1.0 --port=8080
+deployment.apps/spring-boot-docker created
+
+Describe deployment springbootk8sdemo
+
+
+====================================
+
+C:\workspace_docker_new\spring-boot-docker>docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED        SIZE
+spring-boot-docker            latest    a7daf591c0dd   3 days ago     490MB
+gcr.io/k8s-minikube/kicbase   v0.0.42   dbc648475405   2 months ago   1.2GB
+
+C:\workspace_docker_new\spring-boot-docker>docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED        SIZE
+spring-boot-docker            latest    a7daf591c0dd   3 days ago     490MB
+gcr.io/k8s-minikube/kicbase   v0.0.42   dbc648475405   2 months ago   1.2GB
+
+C:\workspace_docker_new\spring-boot-docker>docker image rm a7daf591c0dd
+Untagged: spring-boot-docker:latest
+Deleted: sha256:a7daf591c0dd043b21aeb192136d989ad18d201057e1ec60a36f84ceaeefad45
+
+C:\workspace_docker_new\spring-boot-docker>docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED        SIZE
+gcr.io/k8s-minikube/kicbase   v0.0.42   dbc648475405   2 months ago   1.2GB
+
+C:\workspace_docker_new\spring-boot-docker>minikube start --driver=docker
+W0117 21:06:19.271401   52252 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\shjena\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+* minikube v1.32.0 on Microsoft Windows 10 Enterprise 10.0.19045.3930 Build 19045.3930
+* Using the docker driver based on existing profile
+* Starting control plane node minikube in cluster minikube
+* Pulling base image ...
+* docker "minikube" container is missing, will recreate.
+* Creating docker container (CPUs=2, Memory=4000MB) ...
+* Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+* Configuring bridge CNI (Container Networking Interface) ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+C:\workspace_docker_new\spring-boot-docker>
+
+================
+We want docker to be used inside minikube
+
+C:\workspace_docker_new\spring-boot-docker>minikube docker-env
+W0117 21:10:27.021170   62556 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\shjena\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+SET DOCKER_TLS_VERIFY=1
+SET DOCKER_HOST=tcp://127.0.0.1:63254
+SET DOCKER_CERT_PATH=C:\Users\shjena\.minikube\certs
+SET MINIKUBE_ACTIVE_DOCKERD=minikube
+REM To point your shell to minikube's docker-daemon, run:
+REM @FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+
+C:\workspace_docker_new\spring-boot-docker>@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+W0117 21:10:50.721982   32312 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\shjena\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+
+We can see below docker running inside minikube and we have this many docker images
+C:\workspace_docker_new\spring-boot-docker>docker images
+REPOSITORY                                TAG       IMAGE ID       CREATED         SIZE
+registry.k8s.io/kube-apiserver            v1.28.3   537434729123   3 months ago    126MB
+registry.k8s.io/kube-controller-manager   v1.28.3   10baa1ca1706   3 months ago    122MB
+registry.k8s.io/kube-scheduler            v1.28.3   6d1b4fd1b182   3 months ago    60.1MB
+registry.k8s.io/kube-proxy                v1.28.3   bfc896cf80fb   3 months ago    73.1MB
+registry.k8s.io/etcd                      3.5.9-0   73deb9a3f702   8 months ago    294MB
+registry.k8s.io/coredns/coredns           v1.10.1   ead0a4a53df8   11 months ago   53.6MB
+registry.k8s.io/pause                     3.9       e6f181688397   15 months ago   744kB
+gcr.io/k8s-minikube/storage-provisioner   v5        6e38f40d628d   2 years ago     31.5MB
+
+C:\workspace_docker_new\spring-boot-docker>
+
+Next is to build our project into Kubernetes cluster
+
+C:\workspace_docker_new\spring-boot-docker>docker build -t projectwelcome:1.0 .
+[+] Building 21.8s (7/7) FINISHED                                                    docker:default
+ => [internal] load .dockerignore                                                              0.0s
+ => => transferring context: 2B                                                                0.0s
+ => [internal] load build definition from Dockerfile                                           0.0s
+ => => transferring dockerfile: 228B                                                           0.0s
+ => [internal] load metadata for docker.io/library/openjdk:17                                  1.0s
+ => [internal] load build context                                                              0.3s
+ => => transferring context: 18.49MB                                                           0.3s
+ => [1/2] FROM docker.io/library/openjdk:17@sha256:528707081fdb9562eb819128a9f85ae7fe000e2fb  19.9s
+ => => resolve docker.io/library/openjdk:17@sha256:528707081fdb9562eb819128a9f85ae7fe000e2fba  0.0s
+ => => sha256:528707081fdb9562eb819128a9f85ae7fe000e2fbaeaf9f87662e7b3f38cb7d 1.04kB / 1.04kB  0.0s
+ => => sha256:98f0304b3a3b7c12ce641177a99d1f3be56f532473a528fda38d53d519cafb13 954B / 954B     0.0s
+ => => sha256:5e28ba2b4cdb3a7c3bd0ee2e635a5f6481682b77eabf8b51a17ea8bfe1c0569 4.45kB / 4.45kB  0.0s
+ => => sha256:38a980f2cc8accf69c23deae6743d42a87eb34a54f02396f3fcfd7c2d06e2 42.11MB / 42.11MB  2.6s
+ => => sha256:de849f1cfbe60b1c06a1db83a3129ab0ea397c4852b98e3e4300b12ee57ba 13.53MB / 13.53MB  3.1s
+ => => sha256:a7203ca35e75e068651c9907d659adc721dba823441b78639fde66fc98 187.53MB / 187.53MB  13.3s
+ => => extracting sha256:38a980f2cc8accf69c23deae6743d42a87eb34a54f02396f3fcfd7c2d06e2c5b      7.2s
+ => => extracting sha256:de849f1cfbe60b1c06a1db83a3129ab0ea397c4852b98e3e4300b12ee57ba111      1.9s
+ => => extracting sha256:a7203ca35e75e068651c9907d659adc721dba823441b78639fde66fc988f042f      6.5s
+ => [2/2] ADD target/springbootWelcomeProject.jar springbootWelcomeProject.jar                 0.7s
+ => exporting to image                                                                         0.1s
+ => => exporting layers                                                                        0.1s
+ => => writing image sha256:dc853fa71f05cb40e35de8fb1275ab3c48d414be00c47cc3f96307b91cdd88ce   0.0s
+ => => naming to docker.io/library/projectwelcome:1.0                                          0.0s
+
+View build details: docker-desktop://dashboard/build/default/default/l4nacftyle0xsexq1idppwnm4
+
+Next create Kubernetes service object and deployment object so that we can access it from outer world.
+Delete existing deployment in the kubectl cluster.
+
+C:\workspace_docker_new\spring-boot-docker>kubectl delete deployment --all --all-namespaces=true
+deployment.apps "spring-boot-docker" deleted
+deployment.apps "springbootk8sdemo" deleted
+deployment.apps "springbootwelcome-deployment" deleted
+deployment.apps "coredns" deleted
+
+C:\workspace_docker_new\spring-boot-docker>kubectl get deployment
+No resources found in default namespace.
+
+C:\workspace_docker_new\spring-boot-docker>kubectl create deployment springbootwelcome-deployment --image=projectwelcome:1.0 --port=8080
+deployment.apps/springbootwelcome-deployment created
+
+C:\workspace_docker_new\spring-boot-docker>kubectl get deployment
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+springbootwelcome-deployment   1/1     1            1           12s
+
+KubeCTL deployment describe
+
+C:\workspace_docker_new\spring-boot-docker>Kubectl describe deployment springbootwelcome-deployment
+Name:                   springbootwelcome-deployment
+Namespace:              default
+CreationTimestamp:      Wed, 17 Jan 2024 21:30:06 +0530
+Labels:                 app=springbootwelcome-deployment
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=springbootwelcome-deployment
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=springbootwelcome-deployment
+  Containers:
+   projectwelcome:
+    Image:        projectwelcome:1.0
+    Port:         8080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   springbootwelcome-deployment-985968694 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m13s  deployment-controller  Scaled up replica set springbootwelcome-deployment-985968694 to 1
+We can also find the pod details on which springboot application is up
+
+C:\workspace_docker_new\spring-boot-docker>kubectl get pods
+NAME                                           READY   STATUS    RESTARTS   AGE
+springbootwelcome-deployment-985968694-hf5gx   1/1     Running   0          3m27s
+
+We can next see the logs of our application which is on the pod.
+C:\workspace_docker_new\spring-boot-docker>kubectl logs springbootwelcome-deployment-985968694-hf5gx
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.0.2)
+
+2024-01-17T16:00:08.103Z  INFO 1 --- [           main] c.j.s.b.d.SpringBootDockerApplication    : Starting SpringBootDockerApplication v0.0.1-SNAPSHOT using Java 17.0.2 with PID 1 (/springbootWelcomeProject.jar started by root in /)
+2024-01-17T16:00:08.105Z  INFO 1 --- [           main] c.j.s.b.d.SpringBootDockerApplication    : No active profile set, falling back to 1 default profile: "default"
+2024-01-17T16:00:09.434Z  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-01-17T16:00:09.454Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-17T16:00:09.454Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.5]
+2024-01-17T16:00:09.579Z  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-17T16:00:09.581Z  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1412 ms
+2024-01-17T16:00:10.171Z  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-01-17T16:00:10.184Z  INFO 1 --- [           main] c.j.s.b.d.SpringBootDockerApplication    : Started SpringBootDockerApplication in 2.59 seconds (process running for 3.147)
+
+Next we need to create a service so that it can be accessed outside of the world
+
+C:\workspace_docker_new\spring-boot-docker>kubectl get service
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3d21h
+
+C:\workspace_docker_new\spring-boot-docker>kubectl get deployment
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+springbootwelcome-deployment   1/1     1            1           13m
+
+C:\workspace_docker_new\spring-boot-docker>kubectl expose deployment springbootwelcome-deployment --type=NodePort
+service/springbootwelcome-deployment exposed
+
+C:\workspace_docker_new\spring-boot-docker>kubectl get service
+NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kubernetes                     ClusterIP   10.96.0.1       <none>        443/TCP          3d21h
+springbootwelcome-deployment   NodePort    10.99.232.234   <none>        8080:30137/TCP   15s
+
+C:\workspace_docker_new\spring-boot-docker>minikube service springbootwelcome-deployment --url
+http://127.0.0.1:64668
+! Because you are using a Docker driver on windows, the terminal needs to be open to run it.
+
+http://127.0.0.1:64668/welcome
+Gives us response back 
