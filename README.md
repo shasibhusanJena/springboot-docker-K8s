@@ -1,6 +1,6 @@
 # springboot-docker-K8s
  
-## this project describes how to create and deploy a Springboot application in Kubernate cluster
+### this project describes how to create and deploy a Springboot application in Kubernate cluster
 
 ### Install of Docker and Kubernate on windows
 
@@ -52,7 +52,7 @@
         http://127.0.0.1:64668/welcome
         Gives us response back by running above URL on web
 ### Clean up process in Docker
-    to remove existing docer image , here a7daf591c0dd is image id
+    to remove existing image , here a7daf591c0dd is image id
         - docker image rm a7daf591c0dd
 
 ### Cleanup Process on Kubernate
@@ -60,3 +60,9 @@
     Delete existing deployment in the kubectl cluster.
 
     - kubectl delete deployment --all --all-namespaces=true
+
+### Next step
+
+    -   Add other componets like MySQL into the peoject and find best way to handle using Containerization.
+    -   Add DAO and implementation layer in the project
+    -   Add spring web capabilities like security and transaction modules.
